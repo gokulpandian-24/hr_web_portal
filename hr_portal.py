@@ -5,10 +5,11 @@ import pandas as pd
 import sqlite3
 from datetime import date
 import altair as alt   # charts
-import base64
 from pathlib import Path
+import base64
+
 def get_logo_base64():
-    image_path = Path(r"C:\\Users\\Gokul Pandian\\Downloads\\image-removebg-preview.png")
+    image_path = Path(__file__).parent / "logo.png"
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode()
 
@@ -58,24 +59,17 @@ cursor.execute(
     ("admin", "admin123")
 )
 conn.commit()
-
 def show_header():
     st.markdown(f"""
     <div style='display: flex; align-items: center; justify-content: space-between;
                 background-color: #e8f1fb; padding: 10px 16px; border-radius: 8px;
                 margin-bottom: 16px; flex-wrap: wrap;'>
-
-        <div style='display: flex; align-items: center;'>
-            <img src='data:image/png;base64,{get_logo_base64()}' style='height: 40px; margin-right: 15px;'>
-            <h2 style='margin: 0; color: #003366;'>CACPL HR RBO Portal</h2>
-        </div>
-
+        <h2 style='margin: 0; color: #003366;'>CACPL HR RBO Master Data</h2>
         <div style='color: #003366; font-weight: bold; font-size: 16px;'>
-            👤 {st.session_state.get("username", "")}
+            👤 {st.session_state.get("username", "Guest")}
         </div>
     </div>
     """, unsafe_allow_html=True)
-
 
 # 2.1 THEME SWITCHER
 # ────────────────────────────────────────────────
@@ -202,7 +196,6 @@ def _rerun():
 # 3. AUTH PAGES
 # ────────────────────────────────────────────────
 def auth_page():
-    st.image(r"C:\Users\Gokul Pandian\Downloads\image-removebg-preview.png", width=120)
     st.title("CACPL HR RBO Entry")
     login_tab, reg_tab = st.tabs(["Login", "Register"])
 
@@ -310,6 +303,7 @@ def grid_editor():
 # 6. IMPORT / EXPORT  (handles any sheet & header row)
 # ────────────────────────────────────────────────
 def import_export():
+    show_header()
     st.header(" Import /Export Excel")
     uploaded = st.file_uploader("Upload RBO Master or JDJS workbook", type=["xlsx"])
 
@@ -512,7 +506,6 @@ def view_data():
 # ────────────────────────────────────────────────
 def main_app():
     apply_theme()
-    st.sidebar.image(r"C:\\Users\\Gokul Pandian\\Downloads\\image-removebg-preview.png", width=120)
     st.sidebar.markdown("## " + st.session_state.username)
 
     menu_options = [
